@@ -1,0 +1,42 @@
+{
+  "name": "diploma-project-backend",
+  "version": "1.0.0",
+  "description": "diplom's backend",
+  "main": "app.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node app.js",
+    "dev": "cross-env NODE_ENV=develop nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smirnovs/diploma-project-backend.git"
+  },
+  "author": "Alexandr Smirnov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smirnovs/diploma-project-backend/issues"
+  },
+  "homepage": "https://github.com/smirnovs/diploma-project-backend#readme",
+  "devDependencies": {
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "nodemon": "^2.0.1"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "celebrate": "^10.1.0",
+    "cookie-parser": "^1.4.4",
+    "cross-env": "^6.0.3",
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.0.0",
+    "express-winston": "^4.0.1",
+    "helmet": "^3.21.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.12",
+    "mongoose-unique-validator": "^2.0.3",
+    "validator": "^12.1.0",
+    "winston": "^3.2.1"
+  }
+}
