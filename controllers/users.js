@@ -16,7 +16,10 @@ const createUser = (req, res, next) => {
       password: hash,
       name,
     }))
-    .then((users) => res.status(201).send(users))
+    .then((users) => res.status(201).send({
+      email: users.email,
+      name: users.name,
+    }))
     .catch(() => {
       next(new AuthError(errorMessage.EMAIL_EXIST_ERR));
     });
