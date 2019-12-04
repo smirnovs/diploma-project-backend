@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const mongoAddress = require('../helpers/mongo-address');
 
-mongoose.connect('mongodb://localhost:27017/newsdb', {
+mongoose.connect(mongoAddress.MONGO_ADDRESS, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,

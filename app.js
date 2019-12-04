@@ -5,8 +5,12 @@ const { celebrate, Joi, errors } = require('celebrate');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
+const joiObjectId = require('joi-objectid');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const errorMessage = require('./helpers/error-messages');
+
+Joi.objectId = joiObjectId(Joi);
 
 const {
   login, createUser,
@@ -37,16 +41,21 @@ app.use('/', router);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(5),
-    name: Joi.string().required().min(2).max(30),
+    email: Joi.string().required().email()
+      .error(new Error(errorMessage.NEED_MAIL_ERR)),
+    password: Joi.string().required().min(5)
+      .error(new Error(errorMessage.NEED_PWD_ERR)),
+    name: Joi.string().required().min(2).max(30)
+      .error(new Error(errorMessage.NEED_NAME_ERR)),
   }),
 }), createUser);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(5),
+    email: Joi.string().required().email()
+      .error(new Error(errorMessage.NEED_MAIL_ERR)),
+    password: Joi.string().required().min(5)
+      .error(new Error(errorMessage.NEED_PWD_ERR)),
   }),
 }), login);
 app.use(auth);
@@ -56,16 +65,17 @@ app.use('/articles', articlesRoute);
 app.use('*', errorPage);
 app.use(errorLogger);
 app.use(errors());
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res
     .status(statusCode)
     .send({
       // проверяем статус и выставляем сообщение в зависимости от него
       message: statusCode === 500
-        ? 'На сервере произошла ошибка'
+        ? errorMessage.SERVER_ERR
         : message,
     });
+  next();
 });
 
 app.listen(PORT);

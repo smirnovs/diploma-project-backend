@@ -1,14 +1,16 @@
 const router = require('express').Router();
 const articlesRoute = require('./articles');
 const usersRoute = require('./users');
+const NotFoundError = require('../errors/not-found-err');
+const errorMessage = require('../helpers/error-messages');
+const usualMessage = require('../helpers/usual-messages');
 
 const mainPage = (req, res) => {
-  res.send({ message: 'Тут находится API' });
+  res.send({ message: usualMessage.API_HERE_MSG });
 };
 
-const errorPage = (req, res) => {
-  res.status(404);
-  res.send({ message: 'Запрашиваемый ресурс не найден' });
+const errorPage = () => {
+  throw new NotFoundError(errorMessage.NOT_FOUND_ERR);
 };
 
 router.get('/', mainPage);

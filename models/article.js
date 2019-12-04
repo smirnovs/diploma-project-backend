@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const errorMessage = require('../helpers/error-messages');
 
 const articleSchema = new mongoose.Schema({
   keyword: { // у пользователя есть имя — опишем требования к имени в схеме:
@@ -44,11 +45,11 @@ const articleSchema = new mongoose.Schema({
 articleSchema.path('link').validate((val) => {
   const imgRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
   return imgRegex.test(val);
-}, 'Укажите ссылку на оригинал статьи.');
+}, errorMessage.LINK_TO_ORIGIN_ERR);
 
 articleSchema.path('image').validate((val) => {
   const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g;
   return imgRegex.test(val);
-}, 'Иллюстрация к статье должны быть в виде ссылки на изображение.');
+}, errorMessage.NO_IMG_URL_ERR);
 
 module.exports = mongoose.model('article', articleSchema);

@@ -2,14 +2,13 @@ const Aticle = require('../models/article');
 const NotFoundError = require('../errors/not-found-err');
 const AccessDenied = require('../errors/access-denied');
 const SomeError = require('../errors/some-error');
-
+const errorMessage = require('../helpers/error-messages');
 
 const getArticles = (req, res, next) => {
   Aticle.find({})
     .then((articles) => {
       if (articles.length <= 0) {
-        res.send({ message: 'Карточек пока что нет' });
-        throw new NotFoundError('Карточек пока что нет');
+        throw new NotFoundError(errorMessage.NO_CARDS_ERR);
       } else {
         res.send({ data: articles });
       }
@@ -34,17 +33,16 @@ const deleteArticle = (req, res, next) => {
   const currentUser = req.user._id;
   Aticle.findById(articleId).then((article) => {
     if (!article) {
-      throw new NotFoundError('Нет карточки с таким id');
+      throw new NotFoundError(errorMessage.NO_CARD_WITH_ID_ERR);
     }
     const articleOwner = article.owner.toString();
     if (articleOwner !== currentUser) {
-      res.send({ message: 'Отказано в доступе' });
-      throw new AccessDenied('Отказано в доступе');
+      throw new AccessDenied(errorMessage.ACCESS_DENIED_ERR);
     } else {
       Aticle.findByIdAndRemove(articleId)
         .then((deletedArticle) => {
           if (!deletedArticle) {
-            throw new SomeError('Не удалось удалить');
+            throw new SomeError(errorMessage.CANT_DELETE_ERR);
           }
           //  показываем карточку
           res.send({ data: deletedArticle });

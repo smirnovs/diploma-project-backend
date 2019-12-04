@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const isEmail = require('validator/lib/isEmail');
 const AccessDenied = require('../errors/access-denied');
-
+const errorMessage = require('../helpers/error-messages');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isEmail(v),
-      message: 'Неправильный формат почты',
+      message: errorMessage.WRONG_MAIL_FORMAT_ERR,
     },
   },
   password: {
@@ -33,19 +33,19 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new AccessDenied('Неправильная почта или пароль');
+        throw new AccessDenied(errorMessage.WRONG_MAIL_OR_PWD_ERR);
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new AccessDenied('Неправильная почта или пароль');
+            throw new AccessDenied(errorMessage.WRONG_MAIL_OR_PWD_ERR);
           }
           return user; // теперь user доступен
         });
     });
 };
 
-userSchema.plugin(uniqueValidator, { message: 'Эта почта уже используется.' });
+userSchema.plugin(uniqueValidator, { message: errorMessage.EMAIL_EXIST_ERR });
 
 module.exports = mongoose.model('user', userSchema);
