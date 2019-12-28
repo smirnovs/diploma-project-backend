@@ -6,18 +6,26 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const joiObjectId = require('joi-objectid');
+const cors = require('cors');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorMessage = require('./helpers/error-messages');
 
+
 Joi.objectId = joiObjectId(Joi);
+
+// const corsOptions = {
+//   origin: 'http://localhost:8080/',
+//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
+
 
 const {
   login, createUser,
 } = require('./controllers/users');
 
 const {
-  router, articlesRoute, usersRoute, errorPage,
+  router, articlesRoute, usersRoute, errorPage, unAuth,
 } = require('./routes');
 
 const limiter = rateLimit({
@@ -30,7 +38,8 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use(limiter);
+app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
+// app.use(limiter);
 app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -53,15 +62,16 @@ app.post('/signup', celebrate({
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email()
-      .error(new Error(errorMessage.NEED_MAIL_ERR)),
+      .error(new Error(errorMessage.WRONG_NAME_OR_PWD)),
     password: Joi.string().required().min(5)
-      .error(new Error(errorMessage.NEED_PWD_ERR)),
+      .error(new Error(errorMessage.WRONG_NAME_OR_PWD)),
   }),
 }), login);
 app.use(auth);
 
 app.use('/users', usersRoute);
 app.use('/articles', articlesRoute);
+app.use('/unauth', unAuth);
 app.use('*', errorPage);
 app.use(errorLogger);
 app.use(errors());

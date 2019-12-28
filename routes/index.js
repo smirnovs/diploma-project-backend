@@ -1,4 +1,5 @@
 const router = require('express').Router();
+// const cookies = require('cookies');
 const articlesRoute = require('./articles');
 const usersRoute = require('./users');
 const NotFoundError = require('../errors/not-found-err');
@@ -13,8 +14,14 @@ const errorPage = () => {
   throw new NotFoundError(errorMessage.NOT_FOUND_ERR);
 };
 
+const unAuth = (req, res) => {
+  // cookies.set('jwt', { expires: Date.now() });
+  res.clearCookie('jwt');
+  res.send({ message: 'azaaza' });
+};
+
 router.get('/', mainPage);
 
 module.exports = {
-  router, articlesRoute, usersRoute, errorPage,
+  router, articlesRoute, usersRoute, errorPage, unAuth,
 };

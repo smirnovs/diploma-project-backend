@@ -17,6 +17,7 @@ module.exports = {
   NEED_MAIL_ERR: 'Введите почту',
   NEED_PWD_ERR: 'Введите пароль',
   NEED_NAME_ERR: 'Введите имя',
+  WRONG_NAME_OR_PWD: 'Неправильные имя или пароль',
 
   SERVER_ERR: 'На сервере произошла ошибка',
 
