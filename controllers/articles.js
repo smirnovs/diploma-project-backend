@@ -5,7 +5,22 @@ const SomeError = require('../errors/some-error');
 const errorMessage = require('../helpers/error-messages');
 
 const getArticles = (req, res, next) => {
-  Aticle.find({})
+  const owner = req.user._id;
+  Aticle.find({ owner })
+    .then((articles) => {
+      if (articles.length <= 0) {
+        throw new NotFoundError(errorMessage.NO_CARDS_ERR);
+      } else {
+        res.send({ data: articles });
+      }
+    }).catch(next);
+};
+
+const getArticle = (req, res, next) => {
+  const owner = req.user._id;
+  // const { date } = req.body;
+  const { pseudoid } = req.params;
+  Aticle.find({ owner, pseudoId: pseudoid })
     .then((articles) => {
       if (articles.length <= 0) {
         throw new NotFoundError(errorMessage.NO_CARDS_ERR);
@@ -18,10 +33,10 @@ const getArticles = (req, res, next) => {
 const saveArticle = (req, res, next) => {
   const owner = req.user._id;
   const {
-    keyword, title, text, date, source, link, image,
+    pseudoId, keyword, title, text, date, source, link, image,
   } = req.body;
   Aticle.create({
-    keyword, title, text, date, source, link, image, owner,
+    pseudoId, keyword, title, text, date, source, link, image, owner,
   })
     .then((article) => {
       res.send({ data: article });
@@ -54,5 +69,5 @@ const deleteArticle = (req, res, next) => {
 };
 
 module.exports = {
-  getArticles, saveArticle, deleteArticle,
+  getArticles, saveArticle, deleteArticle, getArticle,
 };

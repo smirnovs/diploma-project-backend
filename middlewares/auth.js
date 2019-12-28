@@ -3,16 +3,17 @@ const AuthError = require('../errors/auth-error');
 const errorMessage = require('../helpers/error-messages');
 const secretKey = require('../helpers/secret-dev-key');
 
-const extractBearerToken = (header) => header.replace('Bearer ', '');
+// const extractBearerToken = (header) => header.replace('Bearer ', '');
 
 module.exports = (req, res, next) => {
-  const { authorization } = req.headers;
+  // const { authorization } = req.headers;
   const { NODE_ENV, JWT_SECRET } = process.env;
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new AuthError(errorMessage.NEED_AUTH_ERR);
-  }
+  // if (!authorization || !authorization.startsWith('Bearer ')) {
+  //   throw new AuthError(errorMessage.NEED_AUTH_ERR);
+  // }
 
-  const token = extractBearerToken(authorization);
+  // const token = extractBearerToken(authorization);
+  const token = req.cookies.jwt;
   let payload;
 
   try {
