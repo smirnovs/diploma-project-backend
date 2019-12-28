@@ -38,7 +38,7 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: 'https://smirnovs.github.io/newsexplorer-front/' }));
+app.use(cors({ credentials: true, origin: 'https://smirnovs.github.io' }));
 // app.use(limiter);
 app.use(helmet());
 app.use(cookieParser());
