@@ -38,7 +38,7 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: 'https://api.myedudomen.ml' }));
+app.use(cors({ credentials: true, origin: 'https://myedudomen.ml' }));
 // app.use(limiter);
 app.use(helmet());
 app.use(cookieParser());
