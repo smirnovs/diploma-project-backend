@@ -1,6 +1,7 @@
 const Aticle = require('../models/article');
 const NotFoundError = require('../errors/not-found-err');
 const AccessDenied = require('../errors/access-denied');
+const NoContent = require('../errors/no-content');
 const SomeError = require('../errors/some-error');
 const errorMessage = require('../helpers/error-messages');
 
@@ -23,7 +24,7 @@ const getArticle = (req, res, next) => {
   Aticle.find({ owner, pseudoId: pseudoid })
     .then((articles) => {
       if (articles.length <= 0) {
-        throw new NotFoundError(errorMessage.NO_CARDS_ERR);
+        throw new NoContent(errorMessage.NO_CARDS_ERR);
       } else {
         res.send({ data: articles });
       }
