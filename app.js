@@ -30,7 +30,7 @@ const {
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 100000, // limit each IP to 100 requests per windowMs
 });
 
 
@@ -39,7 +39,7 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(cors({ credentials: true, origin: 'https://myedudomen.ml' }));
-// app.use(limiter);
+app.use(limiter);
 app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
