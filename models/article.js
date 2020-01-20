@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const errorMessage = require('../helpers/error-messages');
 
 const articleSchema = new mongoose.Schema({
-  pseudoId: { 
-    type: String, 
+  pseudoId: {
+    type: String,
     // required: true,
-    minlength: 1, 
+    minlength: 1,
     maxlength: 30,
   },
   keyword: { // у пользователя есть имя — опишем требования к имени в схеме:
@@ -26,6 +26,7 @@ const articleSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
+    required: true,
     default: Date.now,
   },
   source: {
@@ -53,12 +54,10 @@ articleSchema.path('link').validate((val) => {
 }, errorMessage.LINK_TO_ORIGIN_ERR);
 
 
-//СЕЙЧАС ЕСТЬ КАРТИНКИ И В ВИДЕ УРЛА И В ВИДЕ СТРАННЫХ УРЛОВ. СЛИШКОМ МНОГО ОШИБОК ВЫДАВАЛО, ОТКЛЮЧИЛ ЭТУ ПРОВЕРКУ.
-
-// articleSchema.path('image').validate((val) => {
-//   // const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g;
-//   const imgRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
-//   return imgRegex.test(val);
-// }, errorMessage.NO_IMG_URL_ERR);
+articleSchema.path('image').validate((val) => {
+  // const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g;
+  const imgRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
+  return imgRegex.test(val);
+}, errorMessage.NO_IMG_URL_ERR);
 
 module.exports = mongoose.model('article', articleSchema);
