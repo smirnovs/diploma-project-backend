@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const errorMessage = require('../helpers/error-messages');
 
 const articleSchema = new mongoose.Schema({
-  pseudoId: {
-    type: String,
-    // required: true,
-    minlength: 1,
-    maxlength: 30,
-  },
+  // pseudoId: {
+  //   type: String,
+  //   // required: true,
+  //   minlength: 1,
+  //   maxlength: 30,
+  // },
   keyword: { // у пользователя есть имя — опишем требования к имени в схеме:
     type: String, // имя — это строка
     required: true, // так что - обязательное поле

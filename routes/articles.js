@@ -3,7 +3,7 @@ const { getArticles, saveArticle, deleteArticle, getArticle } = require('../cont
 
 
 articlesRoute.get('/', getArticles);
-articlesRoute.get('/:pseudoid', getArticle);
+articlesRoute.get('/:date', getArticle);
 articlesRoute.post('/', saveArticle);
 articlesRoute.delete('/:articleId', deleteArticle);
 

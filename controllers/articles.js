@@ -20,8 +20,8 @@ const getArticles = (req, res, next) => {
 const getArticle = (req, res, next) => {
   const owner = req.user._id;
   // const { date } = req.body;
-  const { pseudoid } = req.params;
-  Aticle.find({ owner, pseudoId: pseudoid })
+  const { date } = req.params;
+  Aticle.find({ owner, date })
     .then((articles) => {
       if (articles.length <= 0) {
         throw new NoContent(errorMessage.NO_CARDS_ERR);
